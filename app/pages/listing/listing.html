@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>List Items</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      <ion-thumbnail item-left>
+        <img src="{{item.avatar}}">
+      </ion-thumbnail>
+      <h2>{{item.title}}</h2>
+      <p>{{item.description}}</p>
+      <button clear item-right>View</button>
+    </ion-item>
+  </ion-list>
+  <button *ngIf="!loadingContent" block (click)="openActionsDialog()">
+    Actions
+  </button>
+</ion-content>
+
+
