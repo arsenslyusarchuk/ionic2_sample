@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core'
 import { NavController, Loading, ActionSheet} from 'ionic-angular';
 import { ItemService } from '../../services/item-service';
 import { Item } from '../../models/item';
-import { Camera } from 'ionic-native';
+import { UploadComponent } from '../../components/upload-component';
 
 @Component({
   templateUrl: 'build/pages/listing/listing.html',
-  providers: [ItemService]
+  providers: [ItemService],
+  directives: [UploadComponent]
 })
 export class ListingPage implements OnInit  {
   items: Item[] = [];
   loadingContent: boolean;
-  public base64Image: string;
 
   constructor(
     private _navController: NavController,
@@ -31,49 +31,15 @@ export class ListingPage implements OnInit  {
         this.items = data
       });
   }
-  takePicture(){
-    console.log('camera will open');
-    Camera.getPicture({
-        destinationType: Camera.DestinationType.DATA_URL,
-        targetWidth: 200,
-        targetHeight: 200
-    }).then((imageData) => {
-      // imageData is a base64 encoded string
-        let base64Image = "data:image/jpeg;base64," + imageData;
-
-        let item: Item = {
-          "id": 1,
-          "title": "This is the new Item",
-          "description": "This is first Item description",
-          "avatar": base64Image
-        }
-        this.items.push(item);
-    }, (err) => {
-        console.log(err);
-    });
-  }
-  openActionsDialog() {
-    let actionSheet = ActionSheet.create({
-      title: 'Choose action',
-      buttons: [
-        {
-          text: 'Upload Photo',
-          icon: 'add',
-          role: 'add',
-          handler: () => {
-            this.takePicture();
-          }
-        },
-        {
-          text: 'Cancel',
-          icon: 'close',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        }
-      ]
-    });
-    this._navController.present(actionSheet);
+  addItem(data){
+    console.log('image data passed from component');
+    console.log(data);
+    let item: Item = {
+      "id": 1,
+      "title": "This is the new Item",
+      "description": "This is first Item description",
+      "avatar": data.value
+    }
+    this.items.push(item);
   }
 }

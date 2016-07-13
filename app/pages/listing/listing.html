@@ -15,9 +15,7 @@
       <button clear item-right>View</button>
     </ion-item>
   </ion-list>
-  <button *ngIf="!loadingContent" block (click)="openActionsDialog()">
-    Actions
-  </button>
+  <upload-photo [loading]="loadingContent" (imageCaptured)="addItem($event)"></upload-photo>
 </ion-content>
 
 
