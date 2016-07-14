@@ -6,14 +6,30 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-thumbnail item-left>
-        <img src="{{item.avatar}}">
-      </ion-thumbnail>
-      <h2>{{item.title}}</h2>
-      <p>{{item.description}}</p>
-      <button clear item-right>View</button>
-    </ion-item>
+    <ion-item-sliding *ngFor="let item of items">
+      <ion-item>
+        <ion-thumbnail item-left>
+          <img src="{{item.avatar}}">
+        </ion-thumbnail>
+        <h2>{{item.title}}</h2>
+        <p>{{item.description}}</p>
+        <ion-icon clear item-right name="ios-arrow-dropleft"></ion-icon>
+      </ion-item>
+      <ion-item-options>
+        <button light>
+          <ion-icon name="ios-more"></ion-icon>
+          More
+        </button>
+        <button primary>
+          <ion-icon name="text"></ion-icon>
+          Edit
+        </button>
+        <button danger (click)="showDeleteDialog(item)">
+          <ion-icon name="call"></ion-icon>
+          Delete
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
   <upload-photo [loading]="loadingContent" (imageCaptured)="addItem($event)"></upload-photo>
 </ion-content>

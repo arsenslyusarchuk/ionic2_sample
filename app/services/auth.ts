@@ -16,7 +16,7 @@ export class Auth {
 
   loginUser(params: any){
     return new Promise<User>(resolve =>
-      setTimeout(() => resolve(new User(42, params.username, params.password)), 2000) // 2 seconds
+      setTimeout(() => resolve(new User(42, params.username, params.password)), 1000) // 2 seconds
     );
   }
 

@@ -6,7 +6,7 @@ import {Item} from '../models/item';
 export class ItemService {
   getItems() {
     return new Promise<Item[]>(resolve =>
-      setTimeout(() => resolve(ITEMS), 2000) // 2 seconds
+      setTimeout(() => resolve(ITEMS), 1000) // 2 seconds
     );
   }
   getItem(id: number) {
