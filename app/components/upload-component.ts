@@ -27,59 +27,41 @@ export class UploadComponent{
     }).then((im) => {
       // imageData is a base64 encoded string
       // let base64Image = "data:image/jpeg;base64," + im;
-      this.saveImageToFileSystem(im);
       // this.imageCaptured.emit({
       //    value: base64Image
       // })
+      this.saveImageToFileSystem(im);
     }, (err) => {
         console.log(err);
     });
   }
 
-  createDirIfNeeded(dirName) {
-    let targetPath;
-    if (this.platform.is('ios')) {
-      targetPath = cordova.file.documentsDirectory;
-    }
-    else if(this.platform.is('android')) {
-      targetPath = cordova.file.dataDirectory;
-    }
-    File.checkDir(targetPath, dirName)
-      .then((data: any) => {
-        console.log('Hooray', data);
-      })
-      .catch((error: any) => {
-        File.createDir(targetPath, dirName, true);
-        // console.log('Error', error);
-      })
-  }
-
   saveImageToFileSystem(imageUrl){
     this.platform.ready().then(() => {
       let fileTransfer = new Transfer();
-      let destDir = 'filesToUpload';
-
+      let customDir = 'filesToUpload';
       let imageLocation = `${imageUrl}`;
-
-      let targetPath; // storage location depends on device type.
+      let targetPath, persistentStorageDir;
 
       // make sure this is on a device, not an emulation (e.g. chrome tools device mode)
       if(!this.platform.is('cordova')) {
         return false;
       }
 
-      this.createDirIfNeeded(destDir);
-
       if (this.platform.is('ios')) {
-        targetPath = cordova.file.documentsDirectory + `${destDir}/${new Date().getTime()}.jpg`;
+        persistentStorageDir = cordova.file.documentsDirectory;
+        targetPath = persistentStorageDir + `${customDir}/${new Date().getTime()}.jpg`;
       }
       else if(this.platform.is('android')) {
-        targetPath = cordova.file.dataDirectory + `${destDir}/${new Date().getTime()}.jpg`;
+        persistentStorageDir = cordova.file.dataDirectory;
+        targetPath = persistentStorageDir + `${customDir}/${new Date().getTime()}.jpg`;
       }
       else {
         // do nothing, but you could add further types here e.g. windows/blackberry
         return false;
       }
+
+      this.createDirIfNeeded(customDir, persistentStorageDir);
 
       fileTransfer.download(imageLocation, targetPath)
         .then((result: any) => {
@@ -99,6 +81,45 @@ export class UploadComponent{
 
             this._navController.present(alertFailure);
         });
+
+      // display images on ui (list)
+      // Download them from disk 'filesToUpload'
+      this.displayFilesOnUi(persistentStorageDir,customDir);
+    });
+  }
+
+  createDirIfNeeded(dirName, persistentStorageDir) {
+    File.checkDir(persistentStorageDir, dirName)
+      .then((data: any) => {
+        console.log('Hooray', data);
+      })
+      .catch((error: any) => {
+        // create custom directory 'filesToUpload' because it doesn't exists
+        File.createDir(persistentStorageDir, dirName, true);
+      })
+  }
+
+  displayFilesOnUi(persistentStorageDir, dirName){
+    // Read Files from 'filesToUpload' and
+    // display them on UI reading image as Base64
+    console.log(dirName);
+    let fileReader = new FileReader();
+    let _self = this;
+    let reader = new FileReader();
+    File.listDir(persistentStorageDir, dirName).then((data) => {
+      console.log(data);
+      // upload last image from dir
+      let lastEl = data[data.length-1];
+      lastEl.file((file) => {
+
+        reader.onloadend = function() {
+          _self.imageCaptured.emit({
+            value: this.result
+          });
+        };
+
+        reader.readAsDataURL(file);
+      });
     });
   }
 
