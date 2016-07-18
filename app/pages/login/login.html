@@ -15,8 +15,8 @@
             class="error-box">* Username is required!</div>
     <div *ngIf="username.hasError('minlength') && username.touched"
         class="error-box">* Minimum username length is 8!</div>
-    <div *ngIf="username.hasError('checkFirstCharacterValidator') && username.touched"
-        class="error-box">* Username cant't start with number!</div>
+    <div *ngIf="username.hasError('EmailValidator') && username.touched"
+        class="error-box">* Email is not in valid format</div>
 
     <ion-item [class.error]="!password.valid && password.touched">
         <ion-label floating>Password</ion-label>

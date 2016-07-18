@@ -4,7 +4,8 @@ import { NavController, Loading, ActionSheet} from 'ionic-angular';
 import {FORM_DIRECTIVES, FormBuilder,  ControlGroup, Validators, AbstractControl} from '@angular/common';
 import { User } from '../../models/user';
 import { Auth } from '../../services/auth';
-import {ListingPage} from '../../pages/listing/listing';
+import { ListingPage } from '../../pages/listing/listing';
+import { CustomValidators } from '../../validators/custom-validators';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class LoginPage implements OnInit  {
 
   constructor(private _navController: NavController, private fb: FormBuilder, private _authService: Auth) {
     this.loginForm = fb.group({
-        'username': ['', Validators.compose([Validators.required, Validators.minLength(8)])],
+        'username': ['', Validators.compose([Validators.required, Validators.minLength(8), CustomValidators.EmailValidator])],
         'password': ['', Validators.compose([Validators.required, Validators.minLength(8)])]
     });
 
