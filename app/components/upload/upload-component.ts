@@ -5,7 +5,7 @@ import { Transfer, File } from 'ionic-native';
 
 @Component({
   selector: 'upload-photo',
-  templateUrl: 'build/components/upload-component.html'
+  templateUrl: 'build/components/upload/upload-component.html'
 })
 export class UploadComponent{
 

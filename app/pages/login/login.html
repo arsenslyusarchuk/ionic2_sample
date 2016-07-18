@@ -30,6 +30,9 @@
         class="error-box">* Password cant't start with number!</div>
 
     <br/><br/>
-    <button type="submit" class="custom-button" [disabled]="!loginForm.valid" block>Submit</button>
+    <button clear item-right (click)="showModal($event)">Forgot password</button>
+
+    <br/><br/>
+    <button type="submit" class="custom-button" [disabled]="!loginForm.valid" block large>Submit</button>
   </form>
 </ion-content>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { NavController, Loading, ActionSheet, Alert} from 'ionic-angular';
 import { ItemService } from '../../services/item-service';
 import { Item } from '../../models/item';
-import { UploadComponent } from '../../components/upload-component';
+import { UploadComponent } from '../../components/upload/upload-component';
 import { Auth } from '../../services/auth';
 
 @Component({

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core'
 // import { NgForm }  from '@angular/forms';
-import { NavController, Loading, ActionSheet} from 'ionic-angular';
+import { NavController, Loading, ActionSheet, Modal } from 'ionic-angular';
 import {FORM_DIRECTIVES, FormBuilder,  ControlGroup, Validators, AbstractControl} from '@angular/common';
 import { User } from '../../models/user';
 import { Auth } from '../../services/auth';
 import { ListingPage } from '../../pages/listing/listing';
 import { CustomValidators } from '../../validators/custom-validators';
+import { ForgotPasswordComponent } from '../../components/forgot-password/forgot-password-component';
 
 
 @Component({
@@ -58,5 +59,11 @@ export class LoginPage implements OnInit  {
           });
         });
     }
+  }
+
+  showModal(event) {
+    event.preventDefault();
+    let modal = Modal.create(ForgotPasswordComponent);
+    this._navController.present(modal);
   }
 }
