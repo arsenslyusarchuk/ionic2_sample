@@ -20,10 +20,22 @@ export class Auth {
     this._user = user;
   }
 
-  loginUser(params: any){
+  login(params: any){
     return new Promise<User>(resolve =>
       setTimeout(() => resolve(new User(42, params.username, params.password)), 1000) // 2 seconds
     );
+  }
+
+  logout() {
+    return new Promise<User>((resolve, reject) => {
+      this._storage.remove('currentuser').then(() => {
+        this.currentUser = null;
+        resolve();
+      }, (err) => {
+        console.log('error', err);
+        reject(err);
+      });
+    });
   }
 
   //without setters or getters (Using localStorage)
@@ -43,7 +55,6 @@ export class Auth {
         reject(err);
       });
     });
-    // return this._user;
   }
 
   setCurrentUser(user: User) {

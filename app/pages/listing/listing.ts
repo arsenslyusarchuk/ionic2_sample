@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { NavController, Loading, ActionSheet, Alert} from 'ionic-angular';
+import { NavController, Loading, ActionSheet, Alert, MenuController } from 'ionic-angular';
 import { ItemService } from '../../services/item-service';
 import { Item } from '../../models/item';
 import { UploadComponent } from '../../components/upload/upload-component';
@@ -17,13 +17,16 @@ export class ListingPage implements OnInit  {
   constructor(
     private _navController: NavController,
     private _itemService: ItemService,
-    private _auth: Auth
-   )  { this.loadingContent = true; }
+    private _auth: Auth,
+    private _menu: MenuController
+   )  {
+    this.loadingContent = true;
+    this._menu.enable(true);
+  }
 
   ngOnInit() {
     let loading = Loading.create({
-      content: "Please wait...",
-      duration: 3000
+      content: "Please wait..."
     });
     this._navController.present(loading);
     this._itemService.getItems()

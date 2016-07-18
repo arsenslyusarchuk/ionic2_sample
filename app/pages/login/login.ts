@@ -32,7 +32,11 @@ export class LoginPage implements OnInit  {
   username: AbstractControl;
   password: AbstractControl;
 
-  constructor(private _navController: NavController, private fb: FormBuilder, private _authService: Auth) {
+  constructor(
+    private _navController: NavController,
+    private fb: FormBuilder,
+    private _authService: Auth
+    ) {
     this.loginForm = fb.group({
         'username': ['', Validators.compose([Validators.required, Validators.minLength(8), CustomValidators.EmailValidator])],
         'password': ['', Validators.compose([Validators.required, Validators.minLength(8)])]
@@ -47,23 +51,23 @@ export class LoginPage implements OnInit  {
       console.log('Submitted value: ', value);
       let loading = Loading.create({
         content: "Please wait...",
-        duration: 3000
+        dismissOnPageChange: true
       });
       this._navController.present(loading);
-      this._authService.loginUser(value)
+      this._authService.login(value)
         .then((data) => {
           this.loadingContent = false;
           this._authService.setCurrentUser(data).then(() => {
             console.log('current User is',  this._authService.currentUser);
-            this._navController.push(ListingPage);
+            loading.dismiss();
+            this._navController.setRoot(ListingPage);
           });
         });
     }
   }
 
   showModal(event) {
-    event.preventDefault();
-    let modal = Modal.create(ForgotPasswordComponent);
+    let modal = Modal.create(ForgotPasswordComponent, {}, {enableBackdropDismiss: false});
     this._navController.present(modal);
   }
 }
