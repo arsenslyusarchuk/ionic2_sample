@@ -28,17 +28,18 @@
   "name": "ionic_sample_v2",
   "description": "ionic_sample_v2: An Ionic project",
   "cordovaPlugins": [
-    "cordova-plugin-device",
-    "cordova-plugin-console",
     "cordova-plugin-whitelist",
+    "cordova-plugin-device",
     "cordova-plugin-splashscreen",
+    "cordova-plugin-console",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-camera",
     "cordova-plugin-compat",
     "cordova-plugin-file",
     "cordova-plugin-file-transfer",
-    "cordova-plugin-network-information"
+    "cordova-plugin-network-information",
+    "cordova-sqlite-storage"
   ],
   "cordovaPlatforms": [
     {
