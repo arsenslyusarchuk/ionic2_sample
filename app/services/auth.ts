@@ -1,10 +1,16 @@
 import {Injectable} from '@angular/core';
 import {User} from '../models/user';
+import {Storage, LocalStorage, SqlStorage} from 'ionic-angular';
 
 @Injectable()
 export class Auth {
-  private _user: User;
+  public _user: User;
+  private _storage;
 
+  constructor(){
+    // this._storage = new Storage(SqlStorage);
+    this._storage = new Storage(LocalStorage);
+  }
 
   get currentUser() {
     return this._user;
@@ -20,14 +26,35 @@ export class Auth {
     );
   }
 
-  // getItems() {
-  //   return new Promise<Item[]>(resolve =>
-  //     setTimeout(() => resolve(ITEMS), 2000) // 2 seconds
-  //   );
-  // }
-  // getItem(id: number) {
-  //   return Promise.resolve(ITEMS).then(
-  //     items => items.filter(item => item.id === id)[0]
-  //   );
-  // }
+  //without setters or getters (Using localStorage)
+
+  getCurrentUser() {
+    return new Promise<User>((resolve, reject) => {
+      this._storage.get('currentuser').then((data) => {
+        if (data) {
+          this.currentUser = JSON.parse(data);
+          console.warn('LocalStorage.get', data);
+          resolve(data);
+        } else {
+          reject('User not Found')
+        }
+      }, (err) => {
+        console.log('error', err);
+        reject(err);
+      });
+    });
+    // return this._user;
+  }
+
+  setCurrentUser(user: User) {
+    return new Promise<{}>((resolve, reject) => {
+      this._storage.set('currentuser', JSON.stringify(user)).then(() => {
+        this.currentUser = user;
+        resolve();
+      }, (err) => {
+        console.log('error', err);
+        reject(err);
+      });
+    });
+  }
 }

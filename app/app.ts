@@ -14,11 +14,12 @@ export class MyApp {
   private rootPage:any;
 
   constructor(private platform: Platform, private auth: Auth) {
-    if (!auth.currentUser) {
-      this.rootPage = LoginPage;
-    } else {
+    auth.getCurrentUser().then(() => {
       this.rootPage = ListingPage;
-    }
+    }, (err) => {
+      console.warn(err);
+      this.rootPage = LoginPage;
+    });
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

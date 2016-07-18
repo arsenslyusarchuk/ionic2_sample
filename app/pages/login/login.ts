@@ -51,10 +51,10 @@ export class LoginPage implements OnInit  {
       this._authService.loginUser(value)
         .then((data) => {
           this.loadingContent = false;
-          this._authService.currentUser = data;
-          console.log('current User is', data);
-          // loading.dismiss();
-          this._navController.push(ListingPage);
+          this._authService.setCurrentUser(data).then(() => {
+            console.log('current User is',  this._authService.currentUser);
+            this._navController.push(ListingPage);
+          });
         });
     }
   }
