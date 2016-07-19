@@ -1,13 +1,15 @@
-import { Component, Input, Output, EventEmitter} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { NavController, ActionSheet, Platform, Alert} from 'ionic-angular';
 import { Camera } from 'ionic-native';
-import { Transfer, File } from 'ionic-native';
+import { Transfer, File, Network } from 'ionic-native';
 
 @Component({
   selector: 'upload-photo',
   templateUrl: 'build/components/upload/upload-component.html'
 })
-export class UploadComponent{
+export class UploadComponent implements OnInit{
+  disconnectSubscription: any;
+  connectSubscription: any;
 
 
   @Input() loading: boolean;
@@ -16,7 +18,43 @@ export class UploadComponent{
 
   // @Output() base64Image: string;
 
-  constructor( private platform: Platform, private _navController: NavController) {}
+  constructor(
+    private platform: Platform,
+    private _navController: NavController
+    ) {}
+
+  ngOnInit(){
+    this.disconnectSubscription = Network.onDisconnect().subscribe(() => this.networkDisapppeared());
+    this.connectSubscription = Network.onConnect().subscribe(() => this.networkAppeared());
+  }
+
+  ionViewWillUnload(){
+    console.warn('leaving this page');
+    this.disconnectSubscription.unsubscribe();
+    this.connectSubscription.unsubscribe();
+  }
+
+  networkAppeared() {
+    console.log('network connected!'); 
+    /// We just got a connection but we need to wait briefly
+    /// before we determine the connection type.  Might need to wait 
+    /// prior to doing any api requests as well.
+    setTimeout(() => {
+      if (Network.connection === 'wifi') {
+        console.log('we got a wifi connection, woohoo!');
+      } else if (Network.connection === '2g') {
+        console.log('we got a 2g connection, woohoo!');
+      } else if (Network.connection === '3g') {
+        console.log('we got a 3g connection, woohoo!');
+      } else if (Network.connection === '4g') {
+        console.log('we got a 4g connection, woohoo!');
+      }
+    }, 3000);
+  }
+
+  networkDisapppeared(){
+    console.log('network was disconnected :-( ')
+  }
 
   takePicture(){
     console.log('camera will open');
